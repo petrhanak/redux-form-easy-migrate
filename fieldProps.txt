@@ -1,0 +1,110 @@
+component v5
+field:
+  active
+ *autofill > x
+  autofilled
+  checked
+  dirty
+  error
+ *initialValue |
+  invalid
+  name
+  onBlur
+  onChange
+  onDragStart
+  onDrop
+  onFocus
+ *onUpdate < onChange
+  pristine
+  touched
+  valid
+  value
+  visited
+
+component v6
+input:
+  checked
+  name
+  onBlur
+  onChange
+  onDragStart
+  onDrop
+  onFocus
+  value
+meta:
+  active
+  autofilled
+  asyncValidating
+  dirty
+  dispatch
+  error
+  form
+  initial
+  invalid
+  pristine
+  submitting
+  submitFailed
+  touched
+  valid
+  visited
+  warning
+
+form v5
+ *active |
+  asyncValidate
+  asyncValidating
+ *destroyForm < destroy
+  dirty
+  error
+ *fields |
+  handleSubmit
+ *initializeForm < initialize
+  invalid
+  pristine
+ *resetForm < reset
+ *formKey > x
+  submitting
+  submitFailed
+  touch
+ *touchAll > x
+  untouch
+ *untouchAll > x
+  valid
+ *values |
+
+
+form v6
+
+  anyTouched
+  array
+  asyncValidate
+  asyncValidating
+  autofill
+  blur
+  change
+  clearAsyncError
+  clearSubmit
+  clearSubmitErrors
+  destroy
+  dirty
+  dispatch
+  error
+  form
+  handleSubmit
+  initialValues
+  initialize
+  initialized
+  invalid
+  pure
+  pristine
+  reset
+  submit
+  submitFailed
+  submitSucceeded
+  submitting
+  test
+  touch
+  triggerSubmit
+  untouch
+  valid
+  warning
