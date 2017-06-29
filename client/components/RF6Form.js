@@ -32,10 +32,7 @@ const SimpleForm = props => {
 };
 
 export default reduxForm({
-  form: 'v6',
-  // validate: (values, props) => {
-  //   console.log(values, props)
-  // }
+  form: 'v6'
 })(
   connect(store => ({
     test: store.form.rf6

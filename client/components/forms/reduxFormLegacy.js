@@ -5,7 +5,6 @@ import { connect } from 'react-redux'
 
 export function reduxForm(config, ...reduxConnectProps) {
   return Component => {
-
     class LegacyFields extends React.Component {
       render() {
         const {
@@ -42,17 +41,22 @@ export function reduxForm(config, ...reduxConnectProps) {
 
         });
 
-        const handleSubmitPromise = validationFunc => {
-          const submitFunc = handleSubmit(values => {
-            return Promise.resolve(validationFunc(values))
-              .then(val => val, err => {
-                throw new SubmissionError(err)
-              })
-          });
-          return ({ ...params }) => {
-            // console.log(params)
-            return handleSubmit(...params)
+        const handleSubmitPromise = (...params) => {
+
+          const submitFunc = validateFunc =>
+            handleSubmit(values => {
+              return Promise.resolve(validateFunc(values))
+                .then(val => val, err => {
+                  throw new SubmissionError(err)
+                })
+            });
+
+          // submit function passed as function parameter
+          if (params.length === 1) {
+            return submitFunc(params[0])
           }
+
+          return submitFunc(parentProps.onSubmit)(...params)
         };
 
         return (
@@ -61,10 +65,11 @@ export function reduxForm(config, ...reduxConnectProps) {
             active={activeFieldName}
             destroyForm={destroy}
             fields={legacyFields}
-            handleSubmit={handleSubmit}
+            handleSubmit={handleSubmitPromise}
             initializeForm={initialize}
             resetForm={reset}
             values={values}
+            errors={parentProps.errors || {}}
           />
         )
       }
@@ -88,12 +93,13 @@ export function reduxForm(config, ...reduxConnectProps) {
 
     const reduxFormComponent = originalReduxForm({
       ...config,
-      validate: config.validate && function(values, props) {
-        config.validate(
+      validate: config.validate && function (values, props) {
+        return config.validate(
           _.defaultsDeep(values, defaultValues),
           props
         );
-      }
+      },
+      renderComponent: Component
     })(FormComponent);
 
     if (reduxConnectProps.length) {
@@ -127,19 +133,19 @@ export function withLegacyForms(Component) {
 export function withLegacyComponent(Component) {
   class LegacyField extends React.Component {
     render() {
-      const { input, meta, ...props } = this.props;
+      const { input, meta, parentProps, ...props } = this.props;
+
       const field = Object.assign({
         onUpdate: input.onChange
-
       }, input, meta);
 
-      return <Component {...props} field={field} />
+      return <Component {...parentProps} field={field} />
     }
   }
 
   return class WithLegacyComponent extends React.Component {
     render() {
-      return <Field {...this.props} component={LegacyField} />
+      return <Field {...this.props} parentProps={this.props} defaultValue={this.props.value} component={LegacyField} />
     }
   }
 }

@@ -33,10 +33,7 @@ const SimpleForm = props => {
 
 export default reduxForm({
   form: 'v5',
-  fields: ['foo', 'bar.baz', 'abc'],
-  validate: (...f) => {
-    console.log(f)
-  }
+  fields: ['foo', 'bar.baz', 'abc']
 }, store => ({
   test: store.form.rf5
 }))(SimpleForm)
